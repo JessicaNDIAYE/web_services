@@ -3,14 +3,14 @@ package POJO;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ReagirId implements Serializable {
+public class ReactionId implements Serializable {
     private Integer utilisateur;
     private Integer message;
 
     // Constructeur par défaut
-    public ReagirId() {}
+    public ReactionId() {}
 
-    public ReagirId(Integer utilisateur, Integer message) {
+    public ReactionId(Integer utilisateur, Integer message) {
         this.utilisateur = utilisateur;
         this.message = message;
     }
@@ -37,7 +37,7 @@ public class ReagirId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReagirId reagirId = (ReagirId) o;
+        ReactionId reagirId = (ReactionId) o;
         return Objects.equals(utilisateur, reagirId.utilisateur) &&
                 Objects.equals(message, reagirId.message);
     }

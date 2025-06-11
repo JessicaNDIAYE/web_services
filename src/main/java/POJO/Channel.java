@@ -71,4 +71,5 @@ public class Channel {
         publications.remove(publier);
         publier.setChannel(null);
     }
+
 }

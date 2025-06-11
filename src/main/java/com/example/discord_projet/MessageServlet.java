@@ -11,6 +11,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 import com.google.gson.*;
 
@@ -84,7 +85,7 @@ public class MessageServlet extends HttpServlet {
 
             Message message = new Message();
             message.setContenu(json.get("contenu").getAsString());
-            message.setDateEtHeure(new Date());
+            message.setDateEtHeure(LocalDateTime.now());
 
             int utilisateurId = json.get("id_utilisateur").getAsInt();
             Optional<Utilisateur> utilisateur = utilisateurRepository.findById(utilisateurId);
@@ -142,7 +143,7 @@ public class MessageServlet extends HttpServlet {
 
                     if (json.has("contenu")) {
                         message.setContenu(json.get("contenu").getAsString());
-                        message.setDateEtHeure(new LocalDate());
+                        message.setDateEtHeure(LocalDateTime.now());
 
                         Message updatedMessage = messageRepository.save(message);
                         out.print(gson.toJson(updatedMessage));

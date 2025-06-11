@@ -32,7 +32,7 @@ public class UtilisateurServlet extends HttpServlet {
                 JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                 utilisateurRepository.findAll().forEach(user -> {
                     arrayBuilder.add(Json.createObjectBuilder()
-                            .add("id", user.getId())
+                            .add("id", user.getIdUtilisateur())
                             .add("nom", user.getNom())
                             .add("email", user.getEmail()));
                 });
@@ -44,7 +44,7 @@ public class UtilisateurServlet extends HttpServlet {
 
                 if (user.isPresent()) {
                     JsonObjectBuilder userJson = Json.createObjectBuilder()
-                            .add("id", user.get().getId())
+                            .add("id", user.get().getIdUtilisateur())
                             .add("nom", user.get().getNom())
                             .add("email", user.get().getEmail())
                             .add("dateInscription", user.get().getDateInscription().toString());
@@ -71,13 +71,13 @@ public class UtilisateurServlet extends HttpServlet {
             Utilisateur newUser = new Utilisateur();
             newUser.setNom(userData.getString("nom"));
             newUser.setEmail(userData.getString("email"));
-            newUser.setPassword(userData.getString("password"));
+            newUser.setMotDePasse(userData.getString("password"));
             newUser.setDateInscription(new java.util.Date());
 
             Utilisateur savedUser = utilisateurRepository.save(newUser);
 
             JsonObjectBuilder responseBuilder = Json.createObjectBuilder()
-                    .add("id", savedUser.getId())
+                    .add("id", savedUser.getIdUtilisateur())
                     .add("nom", savedUser.getNom())
                     .add("email", savedUser.getEmail());
 

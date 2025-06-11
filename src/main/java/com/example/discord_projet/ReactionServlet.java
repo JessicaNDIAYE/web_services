@@ -1,14 +1,18 @@
 package com.example.discord_projet;
 
-
+import POJO.Message;
+import POJO.Reaction;
+import POJO.ReactionId;
+import POJO.Utilisateur;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
-import javax.json.*;
+import jakarta.json.*;
 import JPA.ReactionRepository;
 import JPA.MessageRepository;
 import JPA.UtilisateurRepository;
+
 import java.util.Optional;
 
 @WebServlet("/api/reactions/*")
@@ -52,10 +56,10 @@ public class ReactionServlet extends HttpServlet {
                 Reaction savedReaction = reactionRepository.save(reaction);
 
                 JsonObjectBuilder responseBuilder = Json.createObjectBuilder()
-                        .add("id", savedReaction.getId())
+                        .add("userId", savedReaction.getUtilisateur().getIdUtilisateur())
+                        .add("messageId", savedReaction.getMessage().getIdMessage())
                         .add("emoji", savedReaction.getEmoji())
-                        .add("messageId", savedReaction.getMessage().getId())
-                        .add("userId", savedReaction.getUtilisateur().getId());
+                        .add("date", savedReaction.getDate().toString());
 
                 response.setStatus(HttpServletResponse.SC_CREATED);
                 response.getWriter().write(responseBuilder.build().toString());
@@ -71,19 +75,23 @@ public class ReactionServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String pathInfo = request.getPathInfo();
-        if (pathInfo == null || pathInfo.equals("/")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        String pathInfo = request.getPathInfo(); // format attendu : /userId/messageId
+        if (pathInfo == null || pathInfo.equals("/") || pathInfo.split("/").length != 3) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URL attendue : /{userId}/{messageId}");
             return;
         }
 
         try {
-            int reactionId = Integer.parseInt(pathInfo.substring(1));
-            if (reactionRepository.existsById(reactionId)) {
-                reactionRepository.deleteById(reactionId);
+            String[] parts = pathInfo.split("/");
+            int userId = Integer.parseInt(parts[1]);
+            int messageId = Integer.parseInt(parts[2]);
+
+            ReactionId id = new ReactionId(userId, messageId);
+            if (reactionRepository.existsById(id)) {
+                reactionRepository.deleteById(id);
                 response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Réaction introuvable");
             }
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());

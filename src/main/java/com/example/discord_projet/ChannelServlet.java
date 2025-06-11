@@ -5,7 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
-import javax.json.*;
+import jakarta.json.*;
 import JPA.ChannelRepository;
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +34,9 @@ public class ChannelServlet extends HttpServlet {
                 JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                 channelRepository.findAll().forEach(channel -> {
                     arrayBuilder.add(Json.createObjectBuilder()
-                            .add("id", channel.getId())
-                            .add("nom", channel.getNom())
-                            .add("description", channel.getDescription()));
+                            .add("id", channel.getIdChannel())
+                            .add("nom", channel.getTopic()));
+                            //.add("description", channel.getDescription()));
                 });
                 response.getWriter().write(arrayBuilder.build().toString());
             } else {
@@ -47,9 +47,9 @@ public class ChannelServlet extends HttpServlet {
                 if (channel.isPresent()) {
                     JsonObjectBuilder channelJson = Json.createObjectBuilder()
                             .add("id", channel.get().getIdChannel())
-                            .add("nom", channel.get().getTopic())
-                            .add("description", channel.get().getDescription())
-                            .add("dateCreation", channel.get().getDateCreation().toString());
+                            .add("nom", channel.get().getTopic());
+                            //.add("description", channel.get().getDescription())
+                            //.add("dateCreation", channel.get().getDateCreation().toString());
 
                     response.getWriter().write(channelJson.build().toString());
                 } else {
@@ -71,16 +71,16 @@ public class ChannelServlet extends HttpServlet {
             JsonObject channelData = reader.readObject();
 
             Channel newChannel = new Channel();
-            newChannel.setNom(channelData.getString("nom"));
-            newChannel.setDescription(channelData.getString("description"));
-            newChannel.setDateCreation(new java.util.Date());
+            newChannel.setTopic(channelData.getString("nom"));
+            //newChannel.setDescription(channelData.getString("description"));
+            //newChannel.setDateCreation(new java.util.Date());
 
             Channel savedChannel = channelRepository.save(newChannel);
 
             JsonObjectBuilder responseBuilder = Json.createObjectBuilder()
-                    .add("id", savedChannel.getId())
-                    .add("nom", savedChannel.getNom())
-                    .add("description", savedChannel.getDescription());
+                    .add("id", savedChannel.getIdChannel())
+                    .add("nom", savedChannel.getTopic());
+                    //.add("description", savedChannel.getDescription());
 
             response.setStatus(HttpServletResponse.SC_CREATED);
             response.getWriter().write(responseBuilder.build().toString());

@@ -3,6 +3,7 @@ package POJO;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,18 @@ public class Utilisateur {
 
     @Column(name = "mot_de_passe", nullable = false)
     private String motDePasse;
+
+    @Column(name = "date_inscription")
+    private java.util.Date dateInscription;
+
+    public Date getDateInscription() {
+        return dateInscription;
+    }
+
+    public void setDateInscription(Date dateInscription) {
+        this.dateInscription = dateInscription;
+    }
+
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();

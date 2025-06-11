@@ -1,15 +1,12 @@
 package com.example.discord_projet;
 
 import POJO.Utilisateur;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
 import java.util.Optional;
-
-import jakarta.json.*;
+import jakarta.json.*; // pour JsonReader, JsonObject, JsonObjectBuilder
 import JPA.UtilisateurRepository;
 
 @WebServlet("/api/auth/*")
@@ -44,7 +41,7 @@ public class AuthServlet extends HttpServlet {
 
                 // Réponse JSON
                 JsonObjectBuilder responseBuilder = Json.createObjectBuilder()
-                        .add("id", user.get().getId())
+                        .add("id", user.get().getIdUtilisateur())
                         .add("nom", user.get().getNom())
                         .add("email", user.get().getEmail());
 

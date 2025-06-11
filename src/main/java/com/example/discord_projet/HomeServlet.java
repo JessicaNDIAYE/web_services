@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
-import javax.json.*;
+import jakarta.json.*;
 import JPA.MessageRepository;
 import JPA.ChannelRepository;
 import JPA.UtilisateurRepository;
@@ -40,7 +40,7 @@ public class HomeServlet extends HttpServlet {
             JsonArrayBuilder lastMessages = Json.createArrayBuilder();
             messageRepository.findTop5ByOrderByDateEtHeureDesc().forEach(msg -> {
                 lastMessages.add(Json.createObjectBuilder()
-                        .add("id", msg.getId())
+                        .add("id", msg.getIdMessage())
                         .add("contenu", msg.getContenu())
                         .add("auteur", msg.getUtilisateur().getNom())
                         .add("date", msg.getDateEtHeure().toString()));
